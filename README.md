@@ -1,7 +1,3 @@
-# Simple cycle finder
+# 11. Найти все циклы, не содержащие указанные вершины.
 
-A minimal Java Swing project that:
-- finds all simple cycles in an undirected graph;
-- ignores specified forbidden vertices;
-- shows all found cycles in a window;
-- highlights the selected cycle.
+Для нахождения циклов использовался DFS
