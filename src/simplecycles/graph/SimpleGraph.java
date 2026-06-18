@@ -25,7 +25,7 @@ public class SimpleGraph {
         checkVertex(u);
         checkVertex(v);
         if (u == v) {
-            return; // self-loops are ignored in this simplified solution
+            return;
         }
         if (!adj.get(u).contains(v)) {
             adj.get(u).add(v);

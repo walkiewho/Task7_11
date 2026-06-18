@@ -20,7 +20,7 @@ public class CycleSolver {
             }
         }
 
-        Set<String> seen = new HashSet<>();
+        Set<HashSet> seen = new HashSet<>();
         List<CycleResult> cycles = new ArrayList<>();
         boolean[] used = new boolean[n];
         ArrayDeque<Integer> path = new ArrayDeque<>();
@@ -44,14 +44,7 @@ public class CycleSolver {
         return cycles;
     }
 
-    private void dfs(SimpleGraph graph,
-                     int start,
-                     int current,
-                     boolean[] forbidden,
-                     boolean[] used,
-                     ArrayDeque<Integer> path,
-                     Set<String> seen,
-                     List<CycleResult> cycles) {
+    private void dfs(SimpleGraph graph, int start, int current, boolean[] forbidden, boolean[] used, ArrayDeque<Integer> path, Set<HashSet> seen, List<CycleResult> cycles) {
         used[current] = true;
         path.addLast(current);
 
@@ -62,8 +55,7 @@ public class CycleSolver {
             if (next == start) {
                 if (path.size() >= 3) {
                     List<Integer> cycle = new ArrayList<>(path);
-                    String key = canonicalKey(cycle);
-                    if (seen.add(key)) {
+                    if (seen.add(new HashSet(cycle))) {
                         cycles.add(new CycleResult(cycle));
                     }
                 }
@@ -76,43 +68,5 @@ public class CycleSolver {
 
         path.removeLast();
         used[current] = false;
-    }
-
-    private String canonicalKey(List<Integer> cycle) {
-        int n = cycle.size();
-        int[] a = cycle.stream().mapToInt(Integer::intValue).toArray();
-        int[] best = null;
-
-        for (int dir = 0; dir < 2; dir++) {
-            int[] b = new int[n];
-            for (int i = 0; i < n; i++) {
-                b[i] = dir == 0 ? a[i] : a[n - 1 - i];
-            }
-            for (int shift = 0; shift < n; shift++) {
-                int[] rot = new int[n];
-                for (int i = 0; i < n; i++) {
-                    rot[i] = b[(i + shift) % n];
-                }
-                if (best == null || lexLess(rot, best)) {
-                    best = rot;
-                }
-            }
-        }
-
-        StringBuilder sb = new StringBuilder();
-        for (int i = 0; i < best.length; i++) {
-            if (i > 0) sb.append(',');
-            sb.append(best[i]);
-        }
-        return sb.toString();
-    }
-
-    private boolean lexLess(int[] a, int[] b) {
-        for (int i = 0; i < a.length; i++) {
-            if (a[i] != b[i]) {
-                return a[i] < b[i];
-            }
-        }
-        return false;
     }
 }
